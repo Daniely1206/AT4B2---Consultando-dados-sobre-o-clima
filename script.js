@@ -1,4 +1,3 @@
-
 const botBusca = document.getElementById('search-btn');
 const cidadeInput = document.getElementById('cidade-input');
 const resultadoClima = document.getElementById('weather-result');
