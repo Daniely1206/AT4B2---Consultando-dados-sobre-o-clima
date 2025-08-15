@@ -1,74 +1,71 @@
-document.addEventListener('DOMContentLoaded',()=>{
-    const searchBtn = document.getElementById('search-btn');
-    const cityInput = document.getElementById('city-input');
-    const weatherResult = document.getElementById('weather-result');
-    const errorMessage = document.getElementById('error-message');
-    const cityNameEl = document.getElementById('city-name');
-    const localTimeEl = document.getElementById('local-time');
-    const weatherIconEl = document.getElementById('weather-icon');
-    const temperatureEl = document.getElementById('temperature');
-    const conditionEl = document.getElementById('condition');
-    const feelsLikeEl = document.getElementById('feels-like');
-    const humidityEl = document.getElementById('humidity');
-    const windSpeedEl = document.getElementById('wind-speed');
-    const pressureEl = document.getElementById('pressure');
-    const visibilityEl = document.getElementById('visibility');
-    const uvIndexEl = document.getElementById('uv-index');
 
-    const API_KEY = '05593afd13d9427585a201822251308';
+const botBusca = document.getElementById('search-btn');
+const cidadeInput = document.getElementById('cidade-input');
+const resultadoClima = document.getElementById('weather-result');
+const messagemErro = document.getElementById('erro-message');
+const cidadeNome = document.getElementById('cidade-nome');
+const tempoLocal = document.getElementById('local-time');
+const climaIcone = document.getElementById('weather-icon');
+const temperatura = document.getElementById('temperature');
+const condicao = document.getElementById('condicaoProp');
+const comoParece = document.getElementById('feels-like');
+const umidade = document.getElementById('umidadeProp');
+const velocidadeVento = document.getElementById('wind-speed');
+const pressao = document.getElementById('pressure');
+const visibilidade = document.getElementById('visibility');
+const uvIndex = document.getElementById('uv-index');
+const chaveAPI = '05593afd13d9427585a201822251308';
 
-    async function fetchWeatherData(city){
-        try{
-            const response = await fetch(`https://api.weatherapi.com/v1/current.json?key=${API_KEY}&q=${city}&lang=pt`);
-            const data = await response.json();
+async function buscandoDados(cidade){
+    try{
+        const resposta = await fetch(`https://api.weatherapi.com/v1/codiMeteo.json?key=${chaveAPI}&q=${cidade}&lang=pt`);
+        const dados = await resposta.json();
 
-            if(data.error){
-                weatherResult.classList.add('hidden');
-                errorMessage.classList.remove('hidden');
-                return;
-            }
-
-            displayWeatherData(data);
-        }catch(error){
-            console.error("Erro ao buscar dados da API:", error);
-            weatherResult.classList.add('hidden');
-            errorMessage.classList.remove('hidden');
+        if(dados.erro){
+            resultadoClima.classList.add('hidden');
+            messagemErro.classList.remove('hidden');
+            return;
         }
-    }
 
-    function displayWeatherData(data){
-        errorMessage.classList.add('hidden');
-        weatherResult.classList.remove('hidden');
-
-        cityNameEl.textContent = `${data.location.name}, ${data.location.region}, ${data.location.country}`;
-        localTimeEl.textContent = `Hora local: ${data.location.localtime}`;
-        weatherIconEl.src = data.current.condition.icon;
-        weatherIconEl.alt = data.current.condition.text;
-        temperatureEl.textContent = `${data.current.temp_c}°C`;
-        conditionEl.textContent = data.current.condition.text;
-        feelsLikeEl.textContent = `${data.current.feelslike_c}°C`;
-        humidityEl.textContent = `${data.current.humidity}%`;
-        windSpeedEl.textContent = `${data.current.wind_kph} km/h`;
-        pressureEl.textContent = `${data.current.pressure_mb} mb`;
-        visibilityEl.textContent = `${data.current.vis_km} km`;
-        uvIndexEl.textContent = data.current.uv;
+        exibirDados(dados);
+    }catch(erro){
+        alert("Erro ao buscar dados da API:", erro);
+        resultadoClima.classList.add('hidden');
+        messagemErro.classList.remove('hidden');
     }
+}
 
-    searchBtn.addEventListener('click',()=>{
-        const city = cityInput.value.trim();
-        if(city){
-            fetchWeatherData(city);
-        }else{
-            alert('Por favor, digite o nome de uma cidade.');
-        }
-    }
-    );
+function exibirDados(dados){
+    messagemErro.classList.add('hidden');
+    resultadoClima.classList.remove('hidden');
 
-    cityInput.addEventListener('keydown',(event)=>{
-        if(event.key=='Enter'){
-            searchBtn.click();
-        }
+    cidadeNome.textContent = `${dados.localizacao.nome}, ${dados.localizacao.regiao}, ${dados.localizacao.pais}`;
+    tempoLocal.textContent = `Hora local: ${dados.localizacao.temlocal}`;
+    climaIcone.src = dados.codiMeteo.condicaoProp.icon;
+    climaIcone.alt = dados.codiMeteo.condicaoProp.text;
+    temperatura.textContent = `${dados.codiMeteo.temp_c}°C`;
+    condicao.textContent = dados.codiMeteo.condicaoProp.text;
+    comoParece.textContent = `${dados.codiMeteo.comoParece_c}°C`;
+    umidade.textContent = `${dados.codiMeteo.umidadeProp}%`;
+    velocidadeVento.textContent = `${dados.codiMeteo.vento}km/h`;
+    pressao.textContent = `${dados.codiMeteo.pressaoProp}mb`;
+    visibilidade.textContent = `${dados.codiMeteo.visibilidade_km}km`;
+    uvIndex.textContent = dados.codiMeteo.uv;
+}
+
+botBusca.addEventListener('click',()=>{
+    const cidade = cidadeInput.value.trim();
+    if(cidade){
+        buscandoDados(cidade);
+    }else{
+        alert('Por favor, digite o nome de uma cidade.');
     }
-    );
+}
+);
+
+cidadeInput.addEventListener('keydown',(evento)=>{
+    if(evento.key=='Enter'){
+        botBusca.click();
+    }
 }
 );
