@@ -30,6 +30,7 @@ async function buscandoDados(cidade){
         exibirDados(dados);
     }catch(erro){
         alert("Erro ao buscar dados da API:", erro);
+        //console.error("Erro ao buscar dados da API:", erro);
         resultadoClima.classList.add('hidden');
         messagemErro.classList.remove('hidden');
     }
