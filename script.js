@@ -25,7 +25,7 @@ async function buscandoDados(cidade){
             messagemErro.classList.remove('hidden');
             return;
         }
-
+        
         exibirDados(dados);
     }catch(erro){
         alert("Erro!", erro);
@@ -38,17 +38,27 @@ function exibirDados(dados){
     messagemErro.classList.add('hidden');
     resultadoClima.classList.remove('hidden');
 
+    const dataAPI = new Date(dados.location.localtime);
+    const opcoesFormato = { 
+        day: '2-digit', 
+        month: '2-digit', 
+        year: 'numeric', 
+        hour: 'numeric', 
+        minute: 'numeric' 
+    };
+    const dataTransformada = dataAPI.toLocaleString('pt-BR', opcoesFormato);
+
     cidadeNome.textContent = `${dados.location.name}, ${dados.location.region}, ${dados.location.country}`;
-    tempoLocal.textContent = `Horário local: ${dados.location.localtime}`;
+    tempoLocal.textContent = `Horário local: ${dataTransformada}`;
     climaIcone.src = dados.current.condition.icon;
     climaIcone.alt = dados.current.condition.text;
     temperatura.textContent = `${dados.current.temp_c}°C`;
     condicao.textContent = dados.current.condition.text;
     sensacao.textContent = `${dados.current.feelslike_c}°C`;
     umidade.textContent = `${dados.current.humidity}%`;
-    velocidadeVento.textContent = `${dados.current.wind_kph} km/h`;
-    pressao.textContent = `${dados.current.pressure_mb} mb`;
-    visibilidade.textContent = `${dados.current.vis_km} km`;
+    velocidadeVento.textContent = `${dados.current.wind_kph}km/h`;
+    pressao.textContent = `${dados.current.pressure_mb}mb`;
+    visibilidade.textContent = `${dados.current.vis_km}km`;
     uvIndex.textContent = dados.current.uv;
 }
 
