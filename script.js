@@ -40,8 +40,8 @@ function exibirDados(dados){
 
     const dataAPI = new Date(dados.location.localtime);
     const opcoesFormato = { 
-        day: '2-digit', 
-        month: '2-digit', 
+        day: 'numeric', 
+        month: 'numeric', 
         year: 'numeric', 
         hour: 'numeric', 
         minute: 'numeric' 
